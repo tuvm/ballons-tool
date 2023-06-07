@@ -62,9 +62,9 @@ const LeftSidebar = () => {
   return (
     <nav className="left-sidebar flex flex-col shrink-0" ref={ref}>
       {items.map((item) => (
-        <div className={clsx("item-wrapper my-3")}>
+        <div className={clsx("item-wrapper mt-1")}>
           <div
-            className={clsx("item flex flex-col gap-2 px-3 cursor-pointer", {
+            className={clsx("item flex flex-col gap-2 cursor-pointer", {
               selected: toolMode === item.key,
             })}
             onClick={() => dispatch({ type: "setTool", value: item.key })}

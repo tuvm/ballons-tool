@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Loading from "../../UI/loading/Loading";
 import "./TopSidebar.scss";
 import { Tool, useGlobalContext } from "@/App";
+import { Select, Option, Button } from "@material-tailwind/react";
+import classnames from 'classnames';
 
 type ToolList = Pick<
   { [key in keyof typeof Tool]: React.ReactNode },
@@ -18,7 +20,7 @@ const TopSidebar = () => {
     [Tool.export]: <ExportOptions />,
   };
 
-  return <div>{Tools[toolMode]}</div>;
+  return <div className="p-4 border-b border-gray-400">{Tools[toolMode]}</div>;
 };
 
 const AI = () => {
@@ -57,13 +59,19 @@ const AI = () => {
   return (
     <ListOptions>
       <div>
-        <p>Choose mode AI</p>
-        <select>
-          <option value="clean-raw">Clean Raw</option>
-          <option value="translate" disabled>
+      <Select label="Select Version">
+        <Option>Material Tailwind HTML</Option>
+        <Option>Material Tailwind React</Option>
+        <Option>Material Tailwind Vue</Option>
+        <Option>Material Tailwind Angular</Option>
+        <Option>Material Tailwind Svelte</Option>
+      </Select>
+        <Select label="Choose mode AI">
+          <Option value="clean-raw">Clean Raw</Option>
+          <Option value="translate" disabled>
             Translate (Coming soon)
-          </option>
-        </select>
+          </Option>
+        </Select>
       </div>
       {/* <div>
         <p>Choose images</p>
@@ -100,6 +108,8 @@ const BrushOptions = () => {
 };
 
 const ExportOptions = () => {
+  const [fileType, setFileType] = useState('');
+
   const sizes = {
     original: {
       width: 0,
@@ -124,29 +134,27 @@ const ExportOptions = () => {
   };
 
   return (
-    <ListOptions>
+    <div>
       <div>
-        <p>File type</p>
-        <select>
-          <option value="png">PNG</option>
-          <option value="jpg">JPG</option>
-          <option value="pdf">PDF</option>
-        </select>
+        <Select label="File type" value={fileType} onChange={(value) => { console.log(value); setFileType(value);}}>
+          <Option value="png">PNG</Option>
+          <Option value="jpg">JPG</Option>
+          <Option value="jpg">PDF</Option>
+        </Select>
       </div>
       <div>
-        <p>Size</p>
-        <select>
+        <Select label="Size">
           {Object.entries(sizes).map(([key, value]) => (
-            <option
+            <Option
               value={key}
-            >{`${value.title} (${value.width} x ${value.height})`}</option>
+            >{`${value.title} (${value.width} x ${value.height})`}</Option>
           ))}
-        </select>
+        </Select>
       </div>
       <div>
-        <button>Export</button>
+        <Button>Export</Button>
       </div>
-    </ListOptions>
+    </div>
   );
 };
 
@@ -160,10 +168,11 @@ const ListOptions = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex gap-2">
       {(children as React.ReactElement[]).map((child, index) => (
-        <>
-          <div className="flex gap-2">{child.props.children}</div>
-          {index !== (children as any).length - 1 && <div>|</div>}
-        </>
+        <div
+          className={classnames('flex gap-2', {'border-r border-gray-400 pr-2': index !== (children as any).length - 1 })}
+        >
+          {child.props.children}
+        </div>
       ))}
     </div>
   );

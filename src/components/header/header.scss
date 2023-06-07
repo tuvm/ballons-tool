@@ -1,12 +1,21 @@
 .header {
-  background-color: #fff;
-  box-shadow: rgba(177, 177, 177, 0.5) 0 2px 16px 0;
+  background-image: linear-gradient(to bottom right, #1B1464, #6F1E51);
   color: #595959;
   margin-left: unset;
   margin-right: unset;
   position: relative;
   text-align: center;
   z-index: 1020;
+}
+
+header::after {
+  height: var(--ds-space-050, 4px);
+  position: absolute;
+  top: 100%;
+  right: 0px;
+  left: 0px;
+  background: linear-gradient(rgba(9, 30, 66, 0.23) 0px, rgba(9, 30, 66, 0.23) 1px, rgba(9, 30, 66, 0.18) 1px, rgba(9, 30, 66, 0) 4px);
+  content: "";
 }
 
 .header-wrapper {

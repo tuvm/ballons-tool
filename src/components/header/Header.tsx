@@ -61,7 +61,7 @@ const Header = () => {
     <header className="header">
       <div className="header-wrapper flex items-center justify-between h-full">
         <section className="flex items-center gap-2 h-full">
-          <img src="/logo.png" alt="logo" className="w-10 h-10" />
+          <img src="/logo.png" alt="logo" className="ml-6 w-10 h-10" />
           {/* <button
             onClick={translate}
             className="border border-gray-300 rounded-md px-4 py-2 text-gray-600 hover:bg-gray-100"
@@ -85,7 +85,7 @@ const Header = () => {
           >
             Export files
           </button> */}
-          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+          <GoogleLogin theme="outline" text="signin" onSuccess={responseMessage} onError={errorMessage} />
         </section>
       </div>
       <Process startTranslate={startTranslate} />

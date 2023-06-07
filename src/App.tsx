@@ -8,6 +8,7 @@ import Main from "./components/main/Main";
 import RightSidebar from "./components/right-sidebar/RightSidebar";
 import { canvasControl, initDispatch } from "./utils/canvas";
 import useVerify from "./utils/useVerify";
+import { ThemeProvider } from "@material-tailwind/react";
 
 function App({ children }) {
   const [, , result] = useVerify();
@@ -24,14 +25,14 @@ function AppChild() {
   const toolMode = state.toolMode;
 
   return (
-    <>
+    <ThemeProvider>
       <Header />
-      <section className="flex gap-2 main-wrapper">
+      <section className="flex gap-2 main-wrapper bg-slate-100">
         <LeftSidebar />
         <Main />
         {toolMode && <RightSidebar />}
       </section>
-    </>
+    </ThemeProvider>
     // <div className="App h-screen flex flex-col">
     //   <GlobalProvider>
     //     {result ? (
