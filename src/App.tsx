@@ -23,6 +23,7 @@ function App({ children }) {
 function AppChild() {
   const { state } = useGlobalContext();
   const toolMode = state.toolMode;
+  console.log(toolMode)
 
   return (
     <ThemeProvider>
@@ -30,7 +31,7 @@ function AppChild() {
       <section className="flex gap-2 main-wrapper bg-slate-100">
         <LeftSidebar />
         <Main />
-        {toolMode && <RightSidebar />}
+        {toolMode === Tool.text && <RightSidebar />}
       </section>
     </ThemeProvider>
     // <div className="App h-screen flex flex-col">
@@ -118,6 +119,7 @@ const reducer = (draft: Draft, action: Action) => {
     case "setImages":
       draft.images = [];
       draft.step = Step.upload;
+      draft.toolMode = Tool.clean;
       action.value.forEach((image, index) => {
         draft.images[index] = {
           origin: URL.createObjectURL(image),
@@ -126,6 +128,7 @@ const reducer = (draft: Draft, action: Action) => {
           export: "",
         };
       });
+      draft.focusImage = 0;
       return;
     case "setImageInpainted":
       draft.images[action.value.index].inpainted = action.value.data;

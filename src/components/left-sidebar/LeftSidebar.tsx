@@ -18,12 +18,12 @@ const LeftSidebar = () => {
   const backgroundActiveRef = React.useRef<HTMLDivElement>(null);
 
   const items = [
-    {
-      label: "Upload",
-      key: Tool.upload,
-      icon: <AddImage />,
-      onClick: () => {},
-    },
+    // {
+    //   label: "Upload",
+    //   key: Tool.upload,
+    //   icon: <AddImage />,
+    //   onClick: () => {},
+    // },
     {
       label: "Auto AI",
       key: Tool.clean,
@@ -69,7 +69,7 @@ const LeftSidebar = () => {
   return (
     <nav className="left-sidebar flex flex-col shrink-0" ref={ref}>
       {items.map((item) => (
-        <div className={clsx("item-wrapper mt-1")}>
+        <div className={clsx("item-wrapper mt-1")} key={item.key}>
           <div
             className={clsx("item flex flex-col gap-2 cursor-pointer", {
               selected: toolMode === item.key,

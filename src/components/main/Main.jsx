@@ -4,10 +4,12 @@ import { useGlobalContext } from "../../App";
 import "./Main.scss";
 import TopSidebar from "../top-sidebar/TopSidebar";
 import Sidebar from "../sidebar/Sidebar";
+import Upload from "../upload/Upload";
 
 const Main = () => {
   const { state, dispatch, canvasControl } = useGlobalContext();
   const [canvasRef, wrapperRef] = [useRef(null), useRef(null)];
+  console.log(state);
 
   useEffect(() => {
     if (!canvasRef.current || !wrapperRef.current) return;
@@ -34,19 +36,26 @@ const Main = () => {
   return (
     <div className="flex-auto flex flex-col main-editor">
       <TopSidebar />
-      <div className="main flex items-center justify-center  gap-6">
-        {state.focusImage > -1 && state.images[state.focusImage]?.origin && (
-          <div className="flex items-center justify-center">
-            <img src={state.images[state.focusImage]?.origin} alt="" />
-          </div>
-        )}
-        {state.focusImage > -1 && (
-          <div className="relative" ref={wrapperRef}>
-            <canvas ref={canvasRef} id="canvas" />
-          </div>
-        )}
-      </div>
-      <Sidebar />
+      {!state.images?.length ? (
+        <Upload />
+      ) : (
+        <>
+          <div className="main flex items-center justify-center  gap-6">
+          
+          {state.focusImage > -1 && state.images[state.focusImage]?.origin && (
+            <div className="flex items-center justify-center">
+              <img src={state.images[state.focusImage]?.origin} alt="" />
+            </div>
+          )}
+          {state.focusImage > -1 && (
+            <div className="relative" ref={wrapperRef}>
+              <canvas ref={canvasRef} id="canvas" />
+            </div>
+          )}
+        </div>
+        <Sidebar />
+      </>
+    )}
     </div>
   );
 };

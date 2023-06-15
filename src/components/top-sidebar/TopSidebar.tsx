@@ -156,6 +156,7 @@ const ListOptions = ({ children }: { children: React.ReactNode }) => {
       {(children as React.ReactElement[]).map((child, index) => (
         <div
           className={classnames('flex gap-2', {'border-r border-gray-400 pr-2': index !== (children as any).length - 1 })}
+          key={index}
         >
           {child}
         </div>
