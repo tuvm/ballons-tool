@@ -82,6 +82,7 @@ export enum Step {
 // Step flow: 0.select -> 1.upload -> 2.ready -> 3.translate -> 4.translating -> 5.translated -> 6.download -> 7.downloaded
 
 export enum Tool {
+  upload = "upload",
   brush = "brush",
   eraser = "eraser",
   text = "text",

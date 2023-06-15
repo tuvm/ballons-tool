@@ -1,6 +1,7 @@
 import { ReactComponent as HealingBrush } from "@assets/bandage.svg";
 import { ReactComponent as FileExport } from "@assets/file-export.svg";
 import { ReactComponent as InputText } from "@assets/input-text.svg";
+import { ReactComponent as AddImage } from "@assets/add_photo_alternate.svg";
 import React, { useEffect } from "react";
 import "./LeftSidebar.scss";
 import clsx from "clsx";
@@ -17,6 +18,12 @@ const LeftSidebar = () => {
   const backgroundActiveRef = React.useRef<HTMLDivElement>(null);
 
   const items = [
+    {
+      label: "Upload",
+      key: Tool.upload,
+      icon: <AddImage />,
+      onClick: () => {},
+    },
     {
       label: "Auto AI",
       key: Tool.clean,

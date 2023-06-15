@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Loading from "../../UI/loading/Loading";
 import "./TopSidebar.scss";
 import { Tool, useGlobalContext } from "@/App";
-import { Select, Option, Button } from "@material-tailwind/react";
+import { Select, Option, Button, Slider, Input, Checkbox } from "@material-tailwind/react";
 import classnames from 'classnames';
 
 type ToolList = Pick<
@@ -20,7 +20,7 @@ const TopSidebar = () => {
     [Tool.export]: <ExportOptions />,
   };
 
-  return <div className="p-4 border-b border-gray-400">{Tools[toolMode]}</div>;
+  return Tools[toolMode] ? <div className="p-4 border-b border-gray-400">{Tools[toolMode]}</div> : null;
 };
 
 const AI = () => {
@@ -59,13 +59,6 @@ const AI = () => {
   return (
     <ListOptions>
       <div>
-      <Select label="Select Version">
-        <Option>Material Tailwind HTML</Option>
-        <Option>Material Tailwind React</Option>
-        <Option>Material Tailwind Vue</Option>
-        <Option>Material Tailwind Angular</Option>
-        <Option>Material Tailwind Svelte</Option>
-      </Select>
         <Select label="Choose mode AI">
           <Option value="clean-raw">Clean Raw</Option>
           <Option value="translate" disabled>
@@ -73,17 +66,13 @@ const AI = () => {
           </Option>
         </Select>
       </div>
-      {/* <div>
-        <p>Choose images</p>
-        <select>
-          <option value="all">All Images</option>
-          <option value="current">Current Image</option>
-        </select>
-      </div>
       <div>
-        <button>Run AI</button>
-        <Loading />
-      </div> */}
+        <Select label="Choose images">
+          <Option value="all">All Images</Option>
+          <Option value="current">Current Image</Option>
+        </Select>
+      </div>
+      <Button>Run AI</Button>
     </ListOptions>
   );
 };
@@ -91,17 +80,14 @@ const AI = () => {
 const BrushOptions = () => {
   return (
     <ListOptions>
-      <div>
+      <div className="flex items-center">
         <p>Brush size</p>
-        <input type="range" />
-        <input type="number" />
+        <Slider className="mx-3" defaultValue={50} />
+        <Input label="Enter Size" type="number" />
       </div>
-      <div>
-        <button>Healing</button>
-        <label>
-          <input type="checkbox" />
-          Heal automatically in 01 second
-        </label>
+      <div className="flex items-center">
+        <Button>Healing</Button>
+        <Checkbox label="Heal automatically in 01 second" />
       </div>
     </ListOptions>
   );
@@ -134,7 +120,7 @@ const ExportOptions = () => {
   };
 
   return (
-    <div>
+    <ListOptions>
       <div>
         <Select label="File type" value={fileType} onChange={(value) => { console.log(value); setFileType(value);}}>
           <Option value="png">PNG</Option>
@@ -154,7 +140,7 @@ const ExportOptions = () => {
       <div>
         <Button>Export</Button>
       </div>
-    </div>
+    </ListOptions>
   );
 };
 
@@ -171,7 +157,7 @@ const ListOptions = ({ children }: { children: React.ReactNode }) => {
         <div
           className={classnames('flex gap-2', {'border-r border-gray-400 pr-2': index !== (children as any).length - 1 })}
         >
-          {child.props.children}
+          {child}
         </div>
       ))}
     </div>
