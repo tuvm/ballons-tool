@@ -3,10 +3,10 @@
   "description": "Vu Minh Tu Monorepo",
   "author": "tu.vm41@gmail.com",
   "scripts": {
-    "start": "concurrently --names=\"evaluation-engine,serve-plugins,browser\" \"pnpm run evaluation-engine\" \"pnpm run serve-plugins\" \"cross-env EVALUATION_ENGINE_URL=http://localhost:9000 pnpm --filter browser run serve\" --kill-others",
+    "start": "pnpm run icons:generate && pnpm run ballons-tool:dev",
     "electron:static": "concurrently --names=\"evaluation-engine,electron\" --kill-others \"pnpm run evaluation-engine\" \"cross-env EVALUATION_ENGINE_URL=http://localhost:9000 pnpm --filter electron run electron:static\"",
     "electron:dev": "concurrently --names=\"evaluation-engine,serve-plugins,electron\" --kill-others \"pnpm run evaluation-engine\" \"pnpm run serve-plugins\" \"cross-env EVALUATION_ENGINE_URL=http://localhost:9000 pnpm --filter electron run electron:dev\"",
-    "ballons-tool:dev": "pnpm run icons:generate && pnpm --filter ballons-tool run dev",
+    "ballons-tool:dev": "pnpm --filter ballons-tool run dev",
     "icons:generate": "pnpm --filter icons run generate",
     "build-browser": "pnpm --filter browser run build",
     "build-electron": "pnpm --filter electron run build",
