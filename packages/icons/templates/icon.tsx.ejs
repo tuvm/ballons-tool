@@ -1,0 +1,16 @@
+// GENERATED AUTOMATICALLY
+// DON NOT EDIT IT MANUALLY
+
+import * as React from 'react';
+import AntdIcon, { AntdIconProps } from '../components/AntdIcon';
+import { IconDefinition } from '../types';
+
+const <%= identifier %>Svg: IconDefinition = <%= content %>;
+
+const <%= identifier %> = (
+  props: AntdIconProps,
+  ref: React.MutableRefObject<HTMLSpanElement>,
+) => <AntdIcon {...props} ref={ref} icon={<%= identifier %>Svg} />;
+  <%= identifier %>.displayName = '<%= identifier %>';
+
+export default React.forwardRef<HTMLSpanElement, AntdIconProps>(<%= identifier %>);
