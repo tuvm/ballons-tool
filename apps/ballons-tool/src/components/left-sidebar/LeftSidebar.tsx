@@ -1,8 +1,4 @@
-import { ReactComponent as HealingBrush } from "@assets/bandage.svg";
-import { ReactComponent as FileExport } from "@assets/file-export.svg";
-import { ReactComponent as InputText } from "@assets/input-text.svg";
-import { ReactComponent as AddImage } from "@assets/add_photo_alternate.svg";
-import { SearchOutlined } from "icons";
+import { ArtificialIntelligence1Outlined, FileExportOutlined, HealingOutlined, InputTextOutlined, SubtitlesOutlined } from "icons";
 import React, { useEffect } from "react";
 import "./LeftSidebar.scss";
 import clsx from "clsx";
@@ -28,25 +24,25 @@ const LeftSidebar = () => {
     {
       label: "Auto AI",
       key: Tool.clean,
-      icon: <SearchOutlined />,
+      icon: <ArtificialIntelligence1Outlined className="text-3xl" />,
       onClick: () => {},
     },
     {
       label: "Healing Brush",
       key: Tool.brush,
-      icon: <HealingBrush />,
+      icon: <HealingOutlined className="text-3xl" />,
       onClick: () => {},
     },
     {
       label: "Subtitle",
       key: Tool.text,
-      icon: <InputText />,
+      icon: <SubtitlesOutlined className="text-3xl" />,
       onClick: () => {},
     },
     {
       label: "Export",
       key: Tool.export,
-      icon: <FileExport />,
+      icon: <FileExportOutlined className="text-3xl" />,
       onClick: () => {},
     },
   ];
@@ -79,7 +75,7 @@ const LeftSidebar = () => {
           >
             <div className="function-wrapper flex flex-col items-center px-2 py-2 gap-1">
               {item.icon}
-              <span>{item.label}</span>
+              <span className="text-base">{item.label}</span>
             </div>
           </div>
         </div>
