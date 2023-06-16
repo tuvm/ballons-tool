@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
-import { useGlobalContext } from "../../App";
+import { Tool, useGlobalContext } from "../../App";
 
 import "./Main.scss";
-import TopSidebar from "../top-sidebar/TopSidebar";
-import Sidebar from "../sidebar/Sidebar";
+import TopSidebar from "../top-bar/TopSidebar";
 import Upload from "../upload/Upload";
+import BottomBar from "../bottom-bar/BottomBar";
+import RightSidebar from "../right-sidebar/RightSidebar";
 
 const Main = () => {
   const { state, dispatch, canvasControl } = useGlobalContext();
+  const toolMode = state.toolMode;
   const [canvasRef, wrapperRef] = [useRef(null), useRef(null)];
   console.log(state);
 
@@ -40,22 +42,25 @@ const Main = () => {
         <Upload />
       ) : (
         <>
-          <div className="main flex items-center justify-center  gap-6">
+          <div className="flex h-full">
+            <div className="main flex items-center justify-center gap-6">
+              {state.focusImage > -1 && state.images[state.focusImage]?.origin && (
+                <div className="image flex items-center justify-center">
+                  <img src={state.images[state.focusImage]?.origin} alt="" />
+                </div>
+              )}
+              {state.focusImage > -1 && (
+                <div className="image relative" ref={wrapperRef}>
+                  <canvas ref={canvasRef} id="canvas" />
+                </div>
+              )}
+            </div>
+            {toolMode === Tool.text && <RightSidebar />}
+          </div>
           
-          {state.focusImage > -1 && state.images[state.focusImage]?.origin && (
-            <div className="flex items-center justify-center">
-              <img src={state.images[state.focusImage]?.origin} alt="" />
-            </div>
-          )}
-          {state.focusImage > -1 && (
-            <div className="relative" ref={wrapperRef}>
-              <canvas ref={canvasRef} id="canvas" />
-            </div>
-          )}
-        </div>
-        <Sidebar />
-      </>
-    )}
+          <BottomBar />
+        </>
+      )}
     </div>
   );
 };

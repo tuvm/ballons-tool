@@ -31,7 +31,6 @@ function AppChild() {
       <section className="flex gap-2 main-wrapper bg-slate-100">
         <LeftSidebar />
         <Main />
-        {toolMode === Tool.text && <RightSidebar />}
       </section>
     </ThemeProvider>
     // <div className="App h-screen flex flex-col">

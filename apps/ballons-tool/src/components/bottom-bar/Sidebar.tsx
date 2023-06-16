@@ -86,7 +86,7 @@ const Sidebar = () => {
   useSetDragFile(dragBox, importImage);
 
   return (
-    <div className="w-full sidebar flex h-40 gap-2">
+    <div className="w-full sidebar flex h-36 gap-2">
       {state.images.length === 0 ? (
         <>
           <div

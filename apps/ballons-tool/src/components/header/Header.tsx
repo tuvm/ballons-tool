@@ -5,7 +5,7 @@ import { Step, useGlobalContext } from "../../App";
 import { ImgTrans, UploadImg } from "../../services/api";
 import { blobToBase64 } from "../../utils/converter";
 import Process from "../process/Process";
-import Toolbar from "../toolbar/Toolbar";
+import Toolbar from "../bottom-bar/Toolbar";
 import "./header.scss";
 import { GoogleLogin } from "@react-oauth/google";
 
