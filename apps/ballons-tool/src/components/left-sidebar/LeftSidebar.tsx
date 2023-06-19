@@ -2,7 +2,7 @@ import { ArtificialIntelligence1Outlined, FileExportOutlined, HealingOutlined, I
 import React, { useEffect } from "react";
 import "./LeftSidebar.scss";
 import clsx from "clsx";
-import { Tool, useGlobalContext } from "@/App";
+import { Tool, useGlobalContext } from "../../GlobalContext";
 import boxModel from "../../UI/box-model/BoxModel";
 
 const LeftSidebar = () => {

@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { Draft } from "../App";
+import { GlobalState } from "../GlobalContext";
 import { postPath } from "../services/api";
 import { Image } from "fabric/fabric-impl";
 
@@ -15,8 +15,8 @@ class CanvasControl {
   isRestore: boolean = false;
   width: number;
   height: number;
-  focusImage: number;
-  state: Draft;
+  focusImageIdx: number;
+  state: GlobalState;
   dispatch: any;
 
   constructor() {}
@@ -225,6 +225,7 @@ class CanvasControl {
     //   this.canvas.isDrawingMode = false;
     //   return;
     // }
+    console.log('add brush')
 
     const [brushSize, brushColor] = [Math.round(25 / 1.8), "rgba(0,0,0,.5)"];
 
@@ -281,7 +282,7 @@ class CanvasControl {
 
   undo() {
     that.pauseSaving = true;
-    const undoState = [...that.state.images[that.state.focusImage].undoState];
+    const undoState = [...that.state.images[that.state.focusImageIdx].undoState];
     const state = undoState.pop();
     if (!state) return (that.pauseSaving = false);
     that.redoStack.push(state);

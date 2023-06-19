@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Loading from "../../UI/loading/Loading";
 import "./TopSidebar.scss";
-import { Tool, useGlobalContext } from "@/App";
+import { Tool, useGlobalContext } from "../../GlobalContext";
 import { Select, Option, Button, Slider, Input, Checkbox } from "@material-tailwind/react";
 import classnames from 'classnames';
+import { ArtificialIntelligence1Outlined, HealingOutlined } from "icons";
 
 type ToolList = Pick<
   { [key in keyof typeof Tool]: React.ReactNode },
@@ -24,42 +25,17 @@ const TopSidebar = () => {
 };
 
 const AI = () => {
-  const items = [
-    {
-      label: "Choose mode AI:",
-      component: (
-        <select>
-          <option value="clean-raw">Clean Raw</option>
-          <option value="translate" disabled>
-            Translate (Coming soon)
-          </option>
-        </select>
-      ),
-    },
-    {
-      label: "Choose images:",
-      component: (
-        <select>
-          <option value="all">All Images</option>
-          <option value="current">Current Image</option>
-        </select>
-      ),
-    },
-    {
-      label: false,
-      component: (
-        <>
-          <button>Run AI</button>
-          <Loading />
-        </>
-      ),
-    },
-  ];
+  const [mode, setMode] = useState('clean-raw');
+  const [images, setImages] = useState('all');
 
   return (
     <ListOptions>
+      <div className="flex items-center text-xl text-gray-700">
+        <ArtificialIntelligence1Outlined className="mr-2 text-3xl leading-4" />
+        <span>Auto AI</span>
+      </div>
       <div>
-        <Select label="Choose mode AI">
+        <Select label="Choose mode AI" value={mode} onChange={(val) => val && setMode(val)}>
           <Option value="clean-raw">Clean Raw</Option>
           <Option value="translate" disabled>
             Translate (Coming soon)
@@ -67,7 +43,7 @@ const AI = () => {
         </Select>
       </div>
       <div>
-        <Select label="Choose images">
+        <Select label="Choose images" value={images} onChange={(val) => val && setImages(val)}>
           <Option value="all">All Images</Option>
           <Option value="current">Current Image</Option>
         </Select>
@@ -78,12 +54,35 @@ const AI = () => {
 };
 
 const BrushOptions = () => {
+  const { canvasControl } = useGlobalContext();
+  const [brushSize, setBrushSize] = useState(25);
+  const handleChangeBrushSize = (size: number) => {
+    setBrushSize(size);
+    canvasControl.setBrushSize(size);
+  }
+
   return (
     <ListOptions>
+      <div className="flex items-center text-xl text-gray-700">
+        <HealingOutlined className="mr-2 text-3xl leading-4" />
+        <span>Healing Brush</span>
+      </div>
       <div className="flex items-center">
-        <p>Brush size</p>
-        <Slider className="mx-3" defaultValue={50} />
-        <Input label="Enter Size" type="number" />
+        <p className="text-base whitespace-nowrap text-gray-700">Brush size</p>
+        <Slider
+          className="mx-3"
+          step={1}
+          defaultValue={50}
+          value={brushSize}
+          onChange={(e) => handleChangeBrushSize(Number(e.target.value))}
+        />
+        <Input
+          max={100}
+          label="Enter Size"
+          type="number"
+          value={brushSize}
+          onChange={(e) => handleChangeBrushSize(Number(e.target.value))}
+        />
       </div>
       <div className="flex items-center">
         <Button>Healing</Button>

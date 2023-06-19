@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { memo, useCallback, useRef } from "react";
-import { Step, useGlobalContext } from "../../App";
+import { Step, useGlobalContext } from "../../GlobalContext";
 import { UploadImg } from "../../services/api";
 import useSetDragFile from "../../utils/useSetDragFile";
 

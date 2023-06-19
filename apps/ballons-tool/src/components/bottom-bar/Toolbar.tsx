@@ -1,7 +1,7 @@
 import React from "react";
-import { Tool, useGlobalContext } from "../../App";
 import { Button, Slider } from "@material-tailwind/react";
 import { CompareOutlined, FullscreenOutlined, RedoOutlined, RefreshOutlined, RemoveRedEyeOutlined, UndoOutlined, ZoomInOutlined } from "icons";
+import { Tool, useGlobalContext } from '../../GlobalContext';
 
 const Toolbar = () => {
   const { canvasControl, dispatch, state } = useGlobalContext();
@@ -17,15 +17,9 @@ const Toolbar = () => {
     canvasControl.addText();
   };
 
-  const addBrush = () => {
-    if (state.toolMode === Tool.brush) {
-      dispatch({ type: "setTool", value: "" });
-      canvasControl.disableBrush();
-    } else {
-      dispatch({ type: "setTool", value: Tool.brush });
-      canvasControl.addBrush();
-    }
-  };
+  const handleChangeCompare = () => {
+    dispatch({ type: "setCompare", value: !state.compare });
+  }
 
   // const changeDiff = (val) => {
   //   dispatch({
@@ -70,7 +64,7 @@ const Toolbar = () => {
         <Button variant="text" className="p-2" title="Reno" onClick={() => canvasControl.redo()}>
           <RedoOutlined className="text-2xl leading-4" />
         </Button>
-        <Button variant="text" className="p-2" title="Compare" onClick={() => canvasControl.redo()}>
+        <Button variant={state.compare ? "filled" : "text"} className="p-2" title="Compare" onClick={handleChangeCompare} >
           <CompareOutlined className="text-2xl leading-4" />
         </Button>
         <Button variant="text" className="p-2" title="Eye" onClick={() => canvasControl.redo()}>
@@ -91,15 +85,7 @@ const Toolbar = () => {
           <RefreshOutlined className="text-2xl leading-4" />
         </Button>
       </div>
-      {/* <Button variant="text" className="p-3" onClick={addBrush} title="Brush">
-        <BrushFill
-          className={clsx({
-            "rounded border-solid border-2 border-gray-400":
-              state.toolMode === Tool.brush,
-          })}
-          size={32}
-        />
-      </Button>
+      {/*
       <Button variant="text" className="p-3" onClick={addText} title="Text">
         <TextIcon
           className={clsx({

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Step, useGlobalContext } from "../../App";
+import { Step, useGlobalContext } from "../../GlobalContext";
 import { DownloadImageFiles, GetImgTransResult } from "../../services/api";
 import { canvasControl } from "../../utils/canvas";
 import invertImage from "../../utils/invertImage";
@@ -64,7 +64,7 @@ const Process = ({ startTranslate }) => {
           break;
       }
 
-      if (state.focusImage > -1 && index === state.focusImage)
+      if (state.focusImageIdx > -1 && index === state.focusImageIdx)
         canvasControl.setBackground(url); //? Set background when image is focused
 
       return url;

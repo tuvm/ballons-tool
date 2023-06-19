@@ -1,5 +1,5 @@
 import React from "react";
-import { Tool, useGlobalContext } from "../../App";
+import { Tool, useGlobalContext } from "../../GlobalContext";
 import BrushOptions from "./BrushOptions";
 import "./RightSidebar.scss";
 import TextOptions from "./TextOptions";

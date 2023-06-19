@@ -1,5 +1,5 @@
 import React from "react";
-import { useGlobalContext } from "../../App";
+import { useGlobalContext } from "../../GlobalContext";
 
 let debounce: any = null;
 

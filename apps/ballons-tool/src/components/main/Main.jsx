@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Tool, useGlobalContext } from "../../App";
+import { Tool, useGlobalContext } from "../../GlobalContext";
 
 import "./Main.scss";
 import TopSidebar from "../top-bar/TopSidebar";
@@ -14,10 +14,11 @@ const Main = () => {
   console.log(state);
 
   useEffect(() => {
+    console.log(state, canvasRef.current);
     if (!canvasRef.current || !wrapperRef.current) return;
 
     canvasControl.init(canvasRef.current, wrapperRef.current);
-    canvasControl.setBackground(state.focusImage?.src);
+    canvasControl.setBackground(state.images[state.focusImageIdx]?.origin);
 
     // Add shortcut key
     document.addEventListener("keydown", canvasControl.shortcut);
@@ -33,7 +34,7 @@ const Main = () => {
         canvasControl.mouseWheel
       );
     };
-  }, [state.focusImage]);
+  }, [state.focusImageIdx]);
 
   return (
     <div className="flex-auto flex flex-col main-editor">
@@ -44,12 +45,12 @@ const Main = () => {
         <>
           <div className="flex h-full">
             <div className="main flex items-center justify-center gap-6">
-              {state.focusImage > -1 && state.images[state.focusImage]?.origin && (
+              {state.compare && state.focusImageIdx > -1 && state.images[state.focusImageIdx]?.origin && (
                 <div className="image flex items-center justify-center">
-                  <img src={state.images[state.focusImage]?.origin} alt="" />
+                  <img src={state.images[state.focusImageIdx]?.origin} alt="" />
                 </div>
               )}
-              {state.focusImage > -1 && (
+              {state.focusImageIdx > -1 && (
                 <div className="image relative" ref={wrapperRef}>
                   <canvas ref={canvasRef} id="canvas" />
                 </div>

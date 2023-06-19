@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { memo, useCallback, useRef } from "react";
-import { Step, useGlobalContext } from "../../App";
+import { Step, useGlobalContext } from "../../GlobalContext";
 import { UploadImg } from "../../services/api";
 import useSetDragFile from "../../utils/useSetDragFile";
 import "./Sidebar.scss";
@@ -122,7 +122,7 @@ const Sidebar = () => {
                 className={clsx(
                   "flex flex-col gap-2 sidebar-item cursor-pointer justify-center",
                   {
-                    "border-blue-400": index === state.focusImage,
+                    "border-blue-400": index === state.focusImageIdx,
                   }
                 )}
                 onClick={(e) => focusImage(e, index)}

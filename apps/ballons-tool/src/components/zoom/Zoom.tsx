@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Step, useGlobalContext } from "../../App";
+import { Step, useGlobalContext } from "../../GlobalContext";
 import "./Zoom.scss";
 
 const zoomOptions = [
@@ -25,19 +25,19 @@ const Zoom = () => {
       type: "changeImageMode",
       value: {
         mode: val,
-        index: state.focusImage,
+        index: state.focusImageIdx,
       },
     });
-    canvasControl.addImage(state.images[state.focusImage][val]);
+    canvasControl.addImage(state.images[state.focusImageIdx][val]);
   };
 
-  return state.step >= Step.upload && typeof state.focusImage === "number" ? (
+  return state.step >= Step.upload && typeof state.focusImageIdx === "number" ? (
     <div className="flex zoom">
       {state.step >= Step.translated && (
         <select
           className="diff"
           onChange={(e) => changeDiff(e.target.value)}
-          value={state.images[state.focusImage].imageMode}
+          value={state.images[state.focusImageIdx].imageMode}
         >
           {diffOptions.map((option) => (
             <option key={option.value} value={option.value}>

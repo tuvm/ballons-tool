@@ -1,7 +1,7 @@
 import saveAs from "file-saver";
 import JSZip from "jszip";
 import React, { memo, useCallback, useRef, useState } from "react";
-import { Step, useGlobalContext } from "../../App";
+import { Step, useGlobalContext } from "../../GlobalContext";
 import { ImgTrans, UploadImg } from "../../services/api";
 import { blobToBase64 } from "../../utils/converter";
 import Process from "../process/Process";
