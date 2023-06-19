@@ -91,7 +91,7 @@ class CanvasControl {
   onChanges() {
     if (!that.canvas || that.dispatch instanceof Function === false) return;
 
-    that.dispatch({ type: "setUndo", value: that.exportJSON() });
+    that.dispatch({ type: "checkPoint", value: that.exportJSON() });
     that.dispatch({
       type: "setExportImage",
       value: that.exportCanvasToImage(),
@@ -280,31 +280,41 @@ class CanvasControl {
     }
   }
 
-  undo() {
+  // undo() {
+  //   that.pauseSaving = true;
+  //   const undoState = [...that.state.images[that.state.focusImageIdx].undoState];
+  //   const state = undoState.pop();
+  //   if (!state) return (that.pauseSaving = false);
+  //   that.redoStack.push(state);
+
+  //   that.canvas.loadFromJSON(state, () => {
+  //     that.canvas.renderAll();
+  //     that.pauseSaving = false;
+
+  //     that.dispatch({
+  //       type: "setExportImage",
+  //       value: that.exportCanvasToImage(),
+  //     });
+
+  //     that.dispatch({ type: "undo", value: undoState });
+  //   });
+  // }
+
+  // redo() {
+  //   that.pauseSaving = true;
+  //   const state = that.redoStack.pop();
+  //   if (state) {
+  //     that.undoStack.push(state);
+  //     that.canvas.loadFromJSON(state, () => {
+  //       that.canvas.renderAll();
+  //       that.pauseSaving = false;
+  //     });
+  //   }
+  // }
+
+  setState(state: any) {
     that.pauseSaving = true;
-    const undoState = [...that.state.images[that.state.focusImageIdx].undoState];
-    const state = undoState.pop();
-    if (!state) return (that.pauseSaving = false);
-    that.redoStack.push(state);
-
-    that.canvas.loadFromJSON(state, () => {
-      that.canvas.renderAll();
-      that.pauseSaving = false;
-
-      that.dispatch({
-        type: "setExportImage",
-        value: that.exportCanvasToImage(),
-      });
-
-      that.dispatch({ type: "undo", value: undoState });
-    });
-  }
-
-  redo() {
-    that.pauseSaving = true;
-    const state = that.redoStack.pop();
     if (state) {
-      that.undoStack.push(state);
       that.canvas.loadFromJSON(state, () => {
         that.canvas.renderAll();
         that.pauseSaving = false;

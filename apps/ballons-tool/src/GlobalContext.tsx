@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo } from "react";
 import { useImmer, useImmerReducer } from "use-immer";
 import { canvasControl, initDispatch } from "./utils/canvas";
+import { UndoRedo } from "./utils/UndoRedo";
 
 interface Action {
   type:
@@ -13,9 +14,10 @@ interface Action {
     | "changeStep"
     | "setImages"
     | "setTool"
-    | "setUndo"
+    | "checkPoint"
     | "setExportImage"
     | "undo"
+    | "redo"
     | "changeImageMode"
     | "setCompare";
   value: any;
@@ -50,7 +52,7 @@ export interface GlobalState {
     mask?: string;
     state?: string;
     imageMode?: ImageMode;
-    undoState?: string[];
+    history?: UndoRedo<{ version: string, objects: Object[] }>;
     export?: string;
   }[];
   projectName: string;
@@ -75,7 +77,7 @@ const reducer = (draft: GlobalState, action: Action) => {
         draft.images[index] = {
           origin: URL.createObjectURL(image),
           imageMode: "origin",
-          undoState: [],
+          history: new UndoRedo<{ version: string, objects: Object[] }>({version: '0.0.1', objects: []}, 20),
           export: "",
         };
       });
@@ -122,23 +124,21 @@ const reducer = (draft: GlobalState, action: Action) => {
         canvasControl.disableBrush();
       }
       return;
-    case "setUndo":
+    case "checkPoint":
       
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
-      // if (Array.isArray(draft.images[draft.focusImage]?.undoState))
       console.log(`📕 action.value - 146:App.tsx \n`, action.value);
-      if (Array.isArray(action.value))
-        draft.images[draft.focusImageIdx].undoState = action.value;
-      else if (draft.images?.[draft.focusImageIdx]?.undoState) {
-        draft.images[draft.focusImageIdx].undoState.push(action.value);
-      } else {
-        draft.images[draft.focusImageIdx].undoState = [action.value];
-      }
-      return;
+      draft.images[draft.focusImageIdx].history?.insert(action.value);
+      
     case "undo":
       console.log(`📕 undo - 151:App.tsx \n`);
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
-      draft.images[draft.focusImageIdx].undoState = action.value;
+      canvasControl.setState(draft.images[draft.focusImageIdx].history?.undo());
+      return;
+
+    case "redo":
+      if (!draft.images?.length || draft.focusImageIdx === -1) return;
+      canvasControl.setState(draft.images[draft.focusImageIdx].history?.redo());
       return;
     case "setCompare":
       draft.compare = action.value;

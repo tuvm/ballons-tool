@@ -72,7 +72,6 @@ const BrushOptions = () => {
         <Slider
           className="mx-3"
           step={1}
-          defaultValue={50}
           value={brushSize}
           onChange={(e) => handleChangeBrushSize(Number(e.target.value))}
         />
