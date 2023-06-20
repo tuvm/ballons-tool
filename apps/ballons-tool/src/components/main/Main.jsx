@@ -14,14 +14,16 @@ const Main = () => {
   console.log(state);
 
   useEffect(() => {
-    console.log(state, canvasRef.current);
     if (!canvasRef.current || !wrapperRef.current) return;
 
     canvasControl.init(canvasRef.current, wrapperRef.current);
+    canvasControl.onChange = (state) => {
+      dispatch({ type: 'checkPoint', value: state });
+    }
     canvasControl.setBackground(state.images[state.focusImageIdx]?.origin);
 
     // Add shortcut key
-    document.addEventListener("keydown", canvasControl.shortcut);
+    // document.addEventListener("keydown", canvasControl.shortcut);
     // Add mouse wheel event
     // document.addEventListener("wheel", canvasControl.mouseWheel);
     wrapperRef.current.addEventListener("wheel", canvasControl.mouseWheel);

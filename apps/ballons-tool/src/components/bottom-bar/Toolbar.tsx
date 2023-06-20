@@ -58,16 +58,16 @@ const Toolbar = () => {
         <ZoomOutLineIcon />
       </Button> */}
       <div className="tool-group border-r border-gray-400 pr-2">
-        <Button variant="text" className="p-2" title="Undo" onClick={() => canvasControl.undo()}>
+        <Button variant="text" className="p-2" title="Undo" onClick={() => dispatch({ type: 'undo' })}>
           <UndoOutlined className="text-2xl leading-4" />
         </Button>
-        <Button variant="text" className="p-2" title="Reno" onClick={() => canvasControl.redo()}>
+        <Button variant="text" className="p-2" title="Reno" onClick={() => dispatch({ type: 'redo' })}>
           <RedoOutlined className="text-2xl leading-4" />
         </Button>
         <Button variant={state.compare ? "filled" : "text"} className="p-2" title="Compare" onClick={handleChangeCompare} >
           <CompareOutlined className="text-2xl leading-4" />
         </Button>
-        <Button variant="text" className="p-2" title="Eye" onClick={() => canvasControl.redo()}>
+        <Button variant="text" className="p-2" title="Eye" onClick={() => {}}>
           <RemoveRedEyeOutlined className="text-2xl leading-4" />
         </Button>
       </div>
@@ -78,10 +78,10 @@ const Toolbar = () => {
         <Slider defaultValue={50} />
       </div>
       <div className="tool-group">
-        <Button variant="text" className="p-2" title="Full Screen" onClick={() => canvasControl.undo()}>
+        <Button variant="text" className="p-2" title="Full Screen" onClick={() => {}}>
           <FullscreenOutlined className="text-2xl leading-4" />
         </Button>
-        <Button variant="text" className="p-2" title="Reset" onClick={() => canvasControl.redo()}>
+        <Button variant="text" className="p-2" title="Reset" onClick={() => {}}>
           <RefreshOutlined className="text-2xl leading-4" />
         </Button>
       </div>

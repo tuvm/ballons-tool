@@ -9,6 +9,7 @@ const LeftSidebar = () => {
   const {
     state: { toolMode },
     dispatch,
+    canvasControl,
   } = useGlobalContext();
   const ref = React.useRef<HTMLDivElement>(null);
   const tabInkBarRef = React.useRef<HTMLDivElement>(null);
@@ -71,7 +72,10 @@ const LeftSidebar = () => {
             className={clsx("item flex flex-col gap-2 cursor-pointer", {
               selected: toolMode === item.key,
             })}
-            onClick={() => dispatch({ type: "setTool", value: item.key })}
+            onClick={() => {
+              if (item.key === Tool.brush) canvasControl.enableBrush();
+              dispatch({ type: "setTool", value: item.key });
+            }}
           >
             <div className="function-wrapper flex flex-col items-center px-2 py-2 gap-1">
               {item.icon}

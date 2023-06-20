@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Step, useGlobalContext } from "../../GlobalContext";
 import { DownloadImageFiles, GetImgTransResult } from "../../services/api";
-import { canvasControl } from "../../utils/canvas";
 import invertImage from "../../utils/invertImage";
 import "./Process.scss";
 
 const Process = ({ startTranslate }) => {
-  const { state, dispatch } = useGlobalContext();
+  const { state, dispatch, canvasControl } = useGlobalContext();
   const [process, setProcess] = useState(-1);
   let interval: any = null;
 

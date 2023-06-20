@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo } from "react";
-import { useImmer, useImmerReducer } from "use-immer";
-import { canvasControl, initDispatch } from "./utils/canvas";
+import { useImmerReducer } from "use-immer";
+import CanvasControl from "./utils/CanvasControl";
 import { UndoRedo } from "./utils/UndoRedo";
 
 interface Action {
@@ -20,7 +20,7 @@ interface Action {
     | "redo"
     | "changeImageMode"
     | "setCompare";
-  value: any;
+  value?: any;
 }
 export enum Step {
   select,
@@ -58,6 +58,7 @@ export interface GlobalState {
   projectName: string;
   process: number;
   focusImageIdx: number;
+  canvasState: any;
   inpainted: string[];
   mask: string[];
   trans: string;
@@ -67,7 +68,7 @@ export interface GlobalState {
 }
 
 const reducer = (draft: GlobalState, action: Action) => {
-  console.log(`📕 action.type - 93:App.tsx \n`, action.type);
+  console.log(`📕 action.type - 93:App.tsx \n`, action.type, action?.value);
   switch (action.type) {
     case "setImages":
       draft.images = [];
@@ -118,27 +119,22 @@ const reducer = (draft: GlobalState, action: Action) => {
       return;
     case "setTool":
       draft.toolMode = action.value;
-      if (action.value === Tool.brush) {
-        canvasControl.addBrush();
-      } else {
-        canvasControl.disableBrush();
-      }
       return;
     case "checkPoint":
       
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
-      console.log(`📕 action.value - 146:App.tsx \n`, action.value);
       draft.images[draft.focusImageIdx].history?.insert(action.value);
-      
+      return;
     case "undo":
-      console.log(`📕 undo - 151:App.tsx \n`);
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
-      canvasControl.setState(draft.images[draft.focusImageIdx].history?.undo());
+      const undoState = draft.images[draft.focusImageIdx].history?.undo();
+      draft.canvasState = undoState;
       return;
 
     case "redo":
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
-      canvasControl.setState(draft.images[draft.focusImageIdx].history?.redo());
+      const redoState = draft.images[draft.focusImageIdx].history?.redo();
+      draft.canvasState = redoState;
       return;
     case "setCompare":
       draft.compare = action.value;
@@ -155,16 +151,18 @@ const initialState: GlobalState = {
   focusImageIdx: -1,
   compare: false,
   inpainted: [],
+  canvasState: null,
   mask: [],
   trans: "",
   toolMode: Tool.upload
 };
 
 const GlobalContext = createContext({});
+const canvasControl = new CanvasControl();
 
 export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useImmerReducer<any, any>(reducer, initialState);
-  const [CV, setSV] = useImmer(null);
+  // const [CV, setSV] = useImmer(null);
 
   const memoizedValue = useMemo(
     () => ({ state, dispatch, canvasControl }),
@@ -172,12 +170,11 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   useEffect(() => {
-    initDispatch(state, dispatch);
-  }, []);
-
-  useEffect(() => {
-    canvasControl.setCanvasState(state);
-  }, [state]);
+    if (canvasControl) {
+      canvasControl.setState(state.canvasState);
+    }
+  }, [state.canvasState]);
+  
 
   // useEffect(() => {
   //   console.log(`📕 CV - 150:App.tsx \n`, CV);
@@ -194,6 +191,6 @@ export const useGlobalContext = () => {
   return useContext(GlobalContext) as {
     state: GlobalState;
     dispatch: React.Dispatch<Action>;
-    canvasControl: typeof canvasControl;
+    canvasControl: CanvasControl;
   };
 };

@@ -48,3 +48,5 @@ export class UndoRedo<T> {
     }
   }
 }
+
+export default UndoRedo;
