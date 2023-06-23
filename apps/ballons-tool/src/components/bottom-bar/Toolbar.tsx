@@ -61,7 +61,7 @@ const Toolbar = () => {
         <Button variant="text" className="p-2" title="Undo" onClick={() => dispatch({ type: 'undo' })}>
           <UndoOutlined className="text-2xl leading-4" />
         </Button>
-        <Button variant="text" className="p-2" title="Reno" onClick={() => dispatch({ type: 'redo' })}>
+        <Button variant="text" className="p-2" title="Redo" onClick={() => dispatch({ type: 'redo' })}>
           <RedoOutlined className="text-2xl leading-4" />
         </Button>
         <Button variant={state.compare ? "filled" : "text"} className="p-2" title="Compare" onClick={handleChangeCompare} >
