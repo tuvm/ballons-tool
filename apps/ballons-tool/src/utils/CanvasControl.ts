@@ -221,16 +221,17 @@ export class CanvasControl {
   addText = () => {
     if (!this.canvas) return;
     const center = this.canvas.getCenter();
-    this.canvas.add(
-      new fabric.IText("Tap and Type", {
-        left: center.left,
-        top: center.top,
-        fontFamily: "Helvetica",
-        fill: "#000",
-        fontSize: 40,
-        textAlign: "center",
-      })
-    );
+    
+    const newText = new fabric.IText("Tap and Type", {
+      left: center.left,
+      top: center.top,
+      fontFamily: "Helvetica",
+      fill: "#000",
+      fontSize: 40,
+      textAlign: "center",
+    });
+    this.canvas.add(newText);
+    return newText;
   }
 
   editText = (config: { fill?: string }) => {
@@ -321,6 +322,11 @@ export class CanvasControl {
     this.canvas.renderAll();
 
     return data;
+  }
+
+  rerender = () => {
+    if (!this.canvas) return;
+    this.canvas.renderAll();
   }
 
   importJSON = (json: string) => {

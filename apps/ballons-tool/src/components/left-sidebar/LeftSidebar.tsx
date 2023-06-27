@@ -74,6 +74,9 @@ const LeftSidebar = () => {
             })}
             onClick={() => {
               if (item.key === Tool.brush) canvasControl.enableBrush();
+              else if (item.key === Tool.text) {
+                canvasControl.disableBrush();
+              }
               dispatch({ type: "setTool", value: item.key });
             }}
           >

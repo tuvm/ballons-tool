@@ -1,27 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../GlobalContext";
-import { Button, Input, Menu } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import Dropdown from "@/UI/Dropdown";
 import { FormatAlignCenterOutlined, FormatAlignLeftOutlined, FormatAlignRightOutlined, FormatBoldOutlined, FormatItalicOutlined, FormatLineSpacingOutlined, FormatUnderlinedOutlined, TextRotationDownOutlined, TextRotationNoneOutlined } from "icons";
 import TextColorSelect from './TextColorSelect';
-
-let debounce: any = null;
-enum TEXT_ALIGN {
-  START,
-  CENTER,
-  END,
-};
-
-enum TEXT_ROTATION {
-  HORIZONTAL,
-  VERTICAL,
-};
+import { TEXT_ALIGN, TEXT_ROTATION } from "@/utils/constants";
 
 const TextOptions = () => {
-  const { canvasControl } = useGlobalContext();
-  const [font, setFont] = useState('Time new roman');
-  const [fontSize, setFontSize] = useState(12);
+  const { canvasControl, dispatch } = useGlobalContext();
   const [textStyle, setTextStyle] = useState({
+    font: 'Time new roman',
+    fontSize: 12,
     bold: false,
     italic: false,
     underline: false,
@@ -32,13 +21,12 @@ const TextOptions = () => {
     color: 'Black',
   });
 
-  const changeColor = (e) => {
-    clearTimeout(debounce);
-
-    debounce = setTimeout(() => {
-      canvasControl.editText({ fill: e.target.value });
-    }, 200);
-  };
+  useEffect(() => {
+    dispatch({ type: 'updateText', value: textStyle });
+    setTimeout(() => {
+      canvasControl.rerender();
+    }, 0);
+  }, [textStyle]);
 
   const fonts = [
     {
@@ -50,7 +38,7 @@ const TextOptions = () => {
     },
   ];
 
-  const fontSizes = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32];
+  const fontSizes = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32, 40, 50, 60, 70, 80, 100];
 
   const textRotations = [
     {
@@ -64,11 +52,17 @@ const TextOptions = () => {
     },
   ];
 
+  const handleAddText = () => {
+    const text = canvasControl.addText();
+    text?.set('fill', 'Red');
+    dispatch({ type: 'addText', value: text });
+  }
+
   return (
     <div>
       <div className="font flex justify-between mb-2">
-        <Dropdown items={fonts} value={font} />
-        <Dropdown items={fontSizes.map(it => ({ title: it + 'pt', value: it }))} value={fontSize} />
+        <Dropdown items={fonts} value={textStyle.font} onChange={(val) => setTextStyle(prev => ({ ...prev, font: val }))} />
+        <Dropdown items={fontSizes.map(it => ({ title: it + 'pt', value: it }))} value={textStyle.fontSize} onChange={(val) => setTextStyle(prev => ({ ...prev, fontSize: val }))} />
       </div>
       <div className="text flex justify-center mb-2">
         <div className="flex gap-1 border-r border-gray-400 pr-2">
@@ -98,13 +92,13 @@ const TextOptions = () => {
       <div className="text flex justify-center mb-2">
         <Dropdown
           prefix={<FormatLineSpacingOutlined />}
-          items={['auto', 0.8, 1, 1.2, 1.25].map(it => ({ title: it, value: it === 'auto' ? 1.1 : it }))}
+          items={['auto', 0.8, 1, 1.2, 1.25, 1.5, 2].map(it => ({ title: it, value: it === 'auto' ? 1.1 : it }))}
           value={textStyle.lineSpacing}
           onChange={(val) => setTextStyle(prev => ({ ...prev, lineSpacing: val }))}
         />
         <Dropdown
           prefix={<FormatLineSpacingOutlined className="rotate-180" />}
-          items={['auto', 0.8, 1, 1.2, 1.25].map(it => ({ title: it, value: it === 'auto' ? 1.1 : it }))}
+          items={['auto', 0.8, 1, 1.2, 1.25, 1.5, 2].map(it => ({ title: it, value: it === 'auto' ? 1.1 : it }))}
           value={textStyle.letterSpacing}
           onChange={(val) => setTextStyle(prev => ({ ...prev, letterSpacing: val }))}
         />
@@ -114,6 +108,7 @@ const TextOptions = () => {
           onChange={(val) => setTextStyle(prev => ({ ...prev, rotation: val }))}
         />
       </div>
+      <Button variant="filled" onClick={handleAddText} className="w-full">Add Text</Button>
     </div>
   );
 };

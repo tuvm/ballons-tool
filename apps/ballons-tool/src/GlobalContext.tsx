@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo } from "react";
 import { useImmerReducer } from "use-immer";
 import CanvasControl from "./utils/CanvasControl";
 import { UndoRedo } from "./utils/UndoRedo";
+import { TEXT_ALIGN, TEXT_ROTATION } from "./utils/constants";
 
 interface Action {
   type:
@@ -19,7 +20,9 @@ interface Action {
     | "undo"
     | "redo"
     | "changeImageMode"
-    | "setCompare";
+    | "setCompare"
+    | "addText"
+    | "updateText";
   value?: any;
 }
 export enum Step {
@@ -53,6 +56,8 @@ export interface GlobalState {
     state?: string;
     imageMode?: ImageMode;
     history?: UndoRedo<{ version: string, objects: Object[] }>;
+    texts?: any[];
+    focusTextIdx?: number;
     export?: string;
   }[];
   projectName: string;
@@ -79,6 +84,8 @@ const reducer = (draft: GlobalState, action: Action) => {
           origin: URL.createObjectURL(image),
           imageMode: "origin",
           history: new UndoRedo<{ version: string, objects: Object[] }>({version: '0.0.1', objects: []}, 20),
+          texts: [],
+          focusTextIdx: -1,
           export: "",
         };
       });
@@ -124,6 +131,26 @@ const reducer = (draft: GlobalState, action: Action) => {
       
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
       draft.images[draft.focusImageIdx].history?.insert(action.value);
+      return;
+    case "addText":
+      if (!draft.images?.length || draft.focusImageIdx === -1) return;
+      draft.images[draft.focusImageIdx].texts?.push(action.value);
+      draft.images[draft.focusImageIdx].focusTextIdx = (draft.images[draft.focusImageIdx]?.texts?.length || 0) - 1;
+      return;
+    case "updateText":
+      if (!draft.images?.length || draft.focusImageIdx === -1 || draft.images[draft.focusImageIdx].focusTextIdx === undefined || draft.images[draft.focusImageIdx].focusTextIdx === -1) return;
+      const texts = draft.images[draft.focusImageIdx].texts;
+      const text: fabric.IText = texts && texts[draft.images[draft.focusImageIdx].focusTextIdx];
+      text.set("textAlign", TEXT_ALIGN[action.value.align]);
+      text.set("fill", action.value.color);
+      text.set("fontWeight", action.value.bold ? 'bold' : 'normal');
+      text.set('underline', action.value.underline);
+      text.set('fontStyle', action.value.italic ? 'italic' : 'normal');
+      text.set('lineHeight', action.value.lineSpacing);
+      text.set('charSpacing', action.value.letterSpacing);
+      text.set('fontFamily', action.value.font);
+      text.set('fontSize', action.value.fontSize);
+      text.set('angle', action.value.rotation === TEXT_ROTATION.HORIZONTAL ? 0 : 90)
       return;
     case "undo":
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
