@@ -38,6 +38,7 @@ export default function Dropdown({
     <Menu open={openMenu} handler={setOpenMenu}>
       <MenuHandler>
         <Button
+          size="sm"
           {...triggers}
           variant="text"
           className="flex items-center gap-3 text-base font-normal capitalize tracking-normal whitespace-nowrap"

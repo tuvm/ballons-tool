@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo } from "react";
 import { useImmerReducer } from "use-immer";
 import CanvasControl from "./utils/CanvasControl";
 import { UndoRedo } from "./utils/UndoRedo";
-import { TEXT_ALIGN, TEXT_ROTATION } from "./utils/constants";
+import { FONT, TEXT_ALIGN, TEXT_ROTATION } from "./utils/constants";
 
 interface Action {
   type:
@@ -22,7 +22,9 @@ interface Action {
     | "changeImageMode"
     | "setCompare"
     | "addText"
-    | "updateText";
+    | "updateText"
+    | "focusText"
+    | "changeText";
   value?: any;
 }
 export enum Step {
@@ -48,6 +50,19 @@ export enum Tool {
 
 type ImageMode = "origin" | "inpainted" | "mask";
 
+interface TextOptions {
+  font: FONT;
+  fontSize: number;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  align: TEXT_ALIGN;
+  rotation: TEXT_ROTATION;
+  lineSpacing: number;
+  letterSpacing: number;
+  color: string,
+}
+
 export interface GlobalState {
   images: {
     origin?: string;
@@ -56,7 +71,7 @@ export interface GlobalState {
     state?: string;
     imageMode?: ImageMode;
     history?: UndoRedo<{ version: string, objects: Object[] }>;
-    texts?: any[];
+    texts?: TextOptions[];
     focusTextIdx?: number;
     export?: string;
   }[];
@@ -136,6 +151,16 @@ const reducer = (draft: GlobalState, action: Action) => {
       if (!draft.images?.length || draft.focusImageIdx === -1) return;
       draft.images[draft.focusImageIdx].texts?.push(action.value);
       draft.images[draft.focusImageIdx].focusTextIdx = (draft.images[draft.focusImageIdx]?.texts?.length || 0) - 1;
+      return;
+    case "focusText":
+      if (!draft.images?.length || draft.focusImageIdx === -1) return;
+      draft.images[draft.focusImageIdx].focusTextIdx =  action.value;
+      return;
+    case "changeText":
+      if (!draft.images?.length || draft.focusImageIdx === -1 || draft.images[draft.focusImageIdx].focusTextIdx === undefined || draft.images[draft.focusImageIdx].focusTextIdx === -1) return;
+      const ts = draft.images[draft.focusImageIdx].texts;
+      const t: fabric.IText = ts && ts[draft.images[draft.focusImageIdx].focusTextIdx];
+      t.set('text', action.value);
       return;
     case "updateText":
       if (!draft.images?.length || draft.focusImageIdx === -1 || draft.images[draft.focusImageIdx].focusTextIdx === undefined || draft.images[draft.focusImageIdx].focusTextIdx === -1) return;

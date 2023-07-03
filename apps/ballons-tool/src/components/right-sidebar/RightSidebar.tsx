@@ -3,6 +3,7 @@ import { Tool, useGlobalContext } from "../../GlobalContext";
 import BrushOptions from "./BrushOptions";
 import "./RightSidebar.scss";
 import TextOptions from "./TextOptions";
+import Subtitles from "./Subtitles";
 
 const RightSidebar = () => {
   const { state } = useGlobalContext();
@@ -10,7 +11,7 @@ const RightSidebar = () => {
 
   const Tools = {
     [Tool.brush]: <BrushOptions />,
-    [Tool.text]: <TextOptions />,
+    [Tool.text]: <Subtitles />,
   };
 
   return (

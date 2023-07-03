@@ -1,5 +1,6 @@
 import { fabric } from "fabric";
 import { Image } from "fabric/fabric-impl";
+import { loremIpsum } from "lorem-ipsum";
 
 export class CanvasControl {
   private canvasElement: HTMLCanvasElement | undefined;
@@ -221,14 +222,24 @@ export class CanvasControl {
   addText = () => {
     if (!this.canvas) return;
     const center = this.canvas.getCenter();
+    const text = loremIpsum({ count: 10, units: 'words' });
     
-    const newText = new fabric.IText("Tap and Type", {
+    const newText = new fabric.Textbox(text, {
+      width: 200,
       left: center.left,
       top: center.top,
       fontFamily: "Helvetica",
       fill: "#000",
       fontSize: 40,
       textAlign: "center",
+    });
+    newText.setControlsVisibility({
+      bl: false,
+      br: false,
+      tl: false,
+      tr: false,
+      mt: false,
+      mb: false,
     });
     this.canvas.add(newText);
     return newText;

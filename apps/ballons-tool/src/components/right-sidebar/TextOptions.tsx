@@ -4,22 +4,11 @@ import { Button } from "@material-tailwind/react";
 import Dropdown from "@/UI/Dropdown";
 import { FormatAlignCenterOutlined, FormatAlignLeftOutlined, FormatAlignRightOutlined, FormatBoldOutlined, FormatItalicOutlined, FormatLineSpacingOutlined, FormatUnderlinedOutlined, TextRotationDownOutlined, TextRotationNoneOutlined } from "icons";
 import TextColorSelect from './TextColorSelect';
-import { TEXT_ALIGN, TEXT_ROTATION } from "@/utils/constants";
+import { DEFAULT_TEXT_OPTIONS, FONT, TEXT_ALIGN, TEXT_ROTATION } from "@/utils/constants";
 
 const TextOptions = () => {
   const { canvasControl, dispatch } = useGlobalContext();
-  const [textStyle, setTextStyle] = useState({
-    font: 'Time new roman',
-    fontSize: 12,
-    bold: false,
-    italic: false,
-    underline: false,
-    align: TEXT_ALIGN.START,
-    rotation: TEXT_ROTATION.HORIZONTAL,
-    lineSpacing: 1.1,
-    letterSpacing: 1.1,
-    color: 'Black',
-  });
+  const [textStyle, setTextStyle] = useState(DEFAULT_TEXT_OPTIONS);
 
   useEffect(() => {
     dispatch({ type: 'updateText', value: textStyle });
@@ -28,15 +17,7 @@ const TextOptions = () => {
     }, 0);
   }, [textStyle]);
 
-  const fonts = [
-    {
-      title: 'Time new roman',
-      value: 'Time new roman',
-    }, {
-      title: 'Arial',
-      value: 'Arial',
-    },
-  ];
+  const fonts = Object.keys(FONT).filter((v) => isNaN(Number(v))).map(it => ({ title: it, value: it }));
 
   const fontSizes = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32, 40, 50, 60, 70, 80, 100];
 
@@ -52,12 +33,6 @@ const TextOptions = () => {
     },
   ];
 
-  const handleAddText = () => {
-    const text = canvasControl.addText();
-    text?.set('fill', 'Red');
-    dispatch({ type: 'addText', value: text });
-  }
-
   return (
     <div>
       <div className="font flex justify-between mb-2">
@@ -65,7 +40,7 @@ const TextOptions = () => {
         <Dropdown items={fontSizes.map(it => ({ title: it + 'pt', value: it }))} value={textStyle.fontSize} onChange={(val) => setTextStyle(prev => ({ ...prev, fontSize: val }))} />
       </div>
       <div className="text flex justify-center mb-2">
-        <div className="flex gap-1 border-r border-gray-400 pr-2">
+        <div className="flex border-r border-gray-400 pr-2">
           <Button variant={textStyle.bold ? "filled" : "text"} className="p-2" title="Bold" onClick={() => setTextStyle(prev => ({ ...prev, bold: !prev.bold }))}>
             <FormatBoldOutlined className="text-2xl leading-4" />
           </Button>
@@ -77,7 +52,7 @@ const TextOptions = () => {
           </Button>
           <TextColorSelect value={textStyle.color} onChange={(val) => setTextStyle(prev => ({ ...prev, color: val }))} />
         </div>
-        <div className="flex gap-1 pl-2">
+        <div className="flex pl-2">
           <Button variant={textStyle.align === TEXT_ALIGN.START ? "filled" : "text"} className="p-2" title="Bold" onClick={() => setTextStyle(prev => ({ ...prev, align: TEXT_ALIGN.START }))}>
             <FormatAlignLeftOutlined className="text-2xl leading-4" />
           </Button>
@@ -97,7 +72,7 @@ const TextOptions = () => {
           onChange={(val) => setTextStyle(prev => ({ ...prev, lineSpacing: val }))}
         />
         <Dropdown
-          prefix={<FormatLineSpacingOutlined className="rotate-180" />}
+          prefix={<FormatLineSpacingOutlined className="-rotate-90" />}
           items={['auto', 0.8, 1, 1.2, 1.25, 1.5, 2].map(it => ({ title: it, value: it === 'auto' ? 1.1 : it }))}
           value={textStyle.letterSpacing}
           onChange={(val) => setTextStyle(prev => ({ ...prev, letterSpacing: val }))}
@@ -108,7 +83,7 @@ const TextOptions = () => {
           onChange={(val) => setTextStyle(prev => ({ ...prev, rotation: val }))}
         />
       </div>
-      <Button variant="filled" onClick={handleAddText} className="w-full">Add Text</Button>
+      
     </div>
   );
 };
